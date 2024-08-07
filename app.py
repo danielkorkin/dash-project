@@ -312,7 +312,7 @@ def create_esm2_t6_figure():
     return fig
 
 
-# Create a figure for Esm2_t12_8M_UR50D
+# Create a figure for Esm2_t12_35M_UR50D
 def create_esm2_t12_figure():
     layers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
     mean_6 = [
@@ -370,7 +370,7 @@ def create_esm2_t12_figure():
     fig.update_layout(
         showlegend=True,
         title=go.layout.Title(
-            text="Esm2_t12_8M_UR50D <br><sup>Protein Stability</sup>", xref="paper", x=0
+            text="Esm2_t12_35M_UR50D <br><sup>Protein Stability</sup>", xref="paper", x=0
         ),
         xaxis_title="Layer",
         yaxis_title="Pearson correlation",
@@ -526,7 +526,7 @@ def esm2_layout():
                 id="esm2-dropdown",
                 options=[
                     {"label": "Esm2_t6_8M_UR50D", "value": "t6"},
-                    {"label": "Esm2_t12_8M_UR50D", "value": "t12"},
+                    {"label": "Esm2_t12_35M_UR50D", "value": "t12"},
                     {"label": "Both", "value": "both"},
                 ],
                 value="t6",
