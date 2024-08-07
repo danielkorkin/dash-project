@@ -23,6 +23,7 @@ app = dash.Dash(__name__, server=server, suppress_callback_exceptions=True)
 type_of_token = ["bpe", "wordpiece", "unigram"]
 sizes = ["5k", "15k", "30k"]
 
+
 # Function to load data from URL
 def load_data(size):
     if size is None:
@@ -59,10 +60,12 @@ def load_data(size):
         unigram_set,
     )
 
+
 # Function to load HTML templates
 def load_html_template(file_path):
     with open(file_path, "r") as file:
         return file.read()
+
 
 # Venn diagram generation function
 RendererType = Literal[
@@ -87,6 +90,7 @@ RendererType = Literal[
     "notebook_connected",
     "kaleido",
 ]
+
 
 def venn_to_plotly(
     L_sets: List[Set[str]],
@@ -186,39 +190,222 @@ def venn_to_plotly(
 
     return p_fig
 
+
 # Create a combined histogram chart with subplots
 def create_combined_histogram(data1, data2, data3, title1, title2, title3):
-    fig = make_subplots(rows=1, cols=3, subplot_titles=(title1, title2, title3), horizontal_spacing=0.175)
-    
+    fig = make_subplots(
+        rows=1,
+        cols=3,
+        subplot_titles=(title1, title2, title3),
+        horizontal_spacing=0.175,
+    )
+
     fig.add_trace(
-        go.Bar(x=list(data1.keys()), y=list(data1.values()), name=title1),
-        row=1, col=1
+        go.Bar(x=list(data1.keys()), y=list(data1.values()), name=title1), row=1, col=1
     )
     fig.add_trace(
-        go.Bar(x=list(data2.keys()), y=list(data2.values()), name=title2),
-        row=1, col=2
+        go.Bar(x=list(data2.keys()), y=list(data2.values()), name=title2), row=1, col=2
     )
     fig.add_trace(
-        go.Bar(x=list(data3.keys()), y=list(data3.values()), name=title3),
-        row=1, col=3
+        go.Bar(x=list(data3.keys()), y=list(data3.values()), name=title3), row=1, col=3
     )
-    
+
     fig.update_layout(
-        height=400, width=1200,
+        height=400,
+        width=1200,
         showlegend=False,
         title_text="Token Length Distribution",
-        yaxis_type='log',
-        yaxis2_type='log',
-        yaxis3_type='log',
-        xaxis_title='token length',
-        yaxis_title='log number of tokens',
-        xaxis2_title='token length',
-        yaxis2_title='log number of tokens',
-        xaxis3_title='token length',
-        yaxis3_title='log number of tokens'
+        yaxis_type="log",
+        yaxis2_type="log",
+        yaxis3_type="log",
+        xaxis_title="token length",
+        yaxis_title="log number of tokens",
+        xaxis2_title="token length",
+        yaxis2_title="log number of tokens",
+        xaxis3_title="token length",
+        yaxis3_title="log number of tokens",
     )
-    
+
     return fig
+
+
+# Create a figure for Esm2_t6_8M_UR50D
+def create_esm2_t6_figure():
+    layers = [1, 2, 3, 4, 5, 6]
+    pearson_attention = [
+        0.2227207720279693,
+        0.5363559722900391,
+        0.4998192191123962,
+        0.4638749659061432,
+        0.4435491561889648,
+        0.2227590233087539,
+    ]
+    pearson_mean = [
+        0.2770425081253052,
+        0.5311498045921326,
+        0.5822485685348511,
+        0.5407155156135559,
+        0.5545222759246826,
+        0.54023277759552,
+    ]
+
+    fig = go.Figure()
+
+    fig.add_trace(
+        go.Scatter(
+            x=layers,
+            y=pearson_mean,
+            mode="lines+markers",
+            name="Esm2_t6 Mean",
+            line=dict(color="#2F6690", width=4),
+            marker=dict(color="#2F6690", size=9),
+        )
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=layers,
+            y=pearson_attention,
+            mode="lines+markers",
+            name="Esm2_t6 Attention",
+            line=dict(color="#B6D094", width=4),
+            marker=dict(color="#B6D094", size=9),
+        )
+    )
+
+    fig.update_layout(
+        showlegend=True,
+        title=go.layout.Title(
+            text="Esm2_t6_8M_UR50D <br><sup>Protein Stability</sup>", xref="paper", x=0
+        ),
+        xaxis_title="Layer",
+        yaxis_title="Pearson correlation",
+        plot_bgcolor="white",
+        width=1000,
+        xaxis=dict(
+            showline=True,
+            showgrid=False,
+            showticklabels=True,
+            linecolor="rgb(204, 204, 204)",
+            linewidth=4,
+            ticks="outside",
+            tickfont=dict(
+                family="Arial",
+                size=16,
+                color="rgb(82, 82, 82)",
+            ),
+        ),
+        yaxis=dict(
+            showline=True,
+            showgrid=False,
+            showticklabels=True,
+            linecolor="rgb(204, 204, 204)",
+            linewidth=4,
+            ticks="outside",
+            tickfont=dict(
+                family="Arial",
+                size=16,
+                color="rgb(82, 82, 82)",
+            ),
+        ),
+    )
+
+    return fig
+
+
+# Create a figure for Esm2_t12_8M_UR50D
+def create_esm2_t12_figure():
+    layers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    mean_6 = [
+        0.2770425081253052,
+        0.5311498045921326,
+        0.5822485685348511,
+        0.5407155156135559,
+        0.5545222759246826,
+        0.54023277759552,
+        0.2770425081253052,
+        0.5311498045921326,
+        0.5822485685348511,
+        0.5407155156135559,
+        0.5545222759246826,
+        0.54023277759552,
+    ]
+    at_6 = [
+        0.2227207720279693,
+        0.5363559722900391,
+        0.4998192191123962,
+        0.4638749659061432,
+        0.4435491561889648,
+        0.2227590233087539,
+        0.2227207720279693,
+        0.5363559722900391,
+        0.4998192191123962,
+        0.4638749659061432,
+        0.4435491561889648,
+        0.2227590233087539,
+    ]
+
+    fig = go.Figure()
+
+    fig.add_trace(
+        go.Scatter(
+            x=layers,
+            y=mean_6,
+            mode="lines+markers",
+            name="Esm2_t12 Mean",
+            line=dict(color="#FFA15A", width=4),
+            marker=dict(color="#FFA15A", size=9),
+        )
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=layers,
+            y=at_6,
+            mode="lines+markers",
+            name="Esm2_t12 Attention",
+            line=dict(color="#19D3F3", width=4),
+            marker=dict(color="#19D3F3", size=9),
+        )
+    )
+
+    fig.update_layout(
+        showlegend=True,
+        title=go.layout.Title(
+            text="Esm2_t12_8M_UR50D <br><sup>Protein Stability</sup>", xref="paper", x=0
+        ),
+        xaxis_title="Layer",
+        yaxis_title="Pearson correlation",
+        plot_bgcolor="white",
+        width=1000,
+        xaxis=dict(
+            showline=True,
+            showgrid=False,
+            showticklabels=True,
+            linecolor="rgb(204, 204, 204)",
+            linewidth=4,
+            ticks="outside",
+            tickfont=dict(
+                family="Arial",
+                size=16,
+                color="rgb(82, 82, 82)",
+            ),
+        ),
+        yaxis=dict(
+            showline=True,
+            showgrid=False,
+            showticklabels=True,
+            linecolor="rgb(204, 204, 204)",
+            linewidth=4,
+            ticks="outside",
+            tickfont=dict(
+                family="Arial",
+                size=16,
+                color="rgb(82, 82, 82)",
+            ),
+        ),
+    )
+
+    return fig
+
 
 # Define the layout of the app
 app.layout = html.Div(
@@ -248,6 +435,11 @@ app.layout = html.Div(
                                             href="/graph/2",
                                             className="dropdown-item",
                                         ),
+                                        html.A(
+                                            "ESM2 Protein Stability",
+                                            href="/graph/3",
+                                            className="dropdown-item",
+                                        ),
                                     ],
                                 ),
                             ],
@@ -260,6 +452,7 @@ app.layout = html.Div(
     ]
 )
 
+
 # Callback to display the appropriate page content
 @app.callback(Output("page-content", "children"), [Input("url", "pathname")])
 def display_page(pathname):
@@ -267,9 +460,12 @@ def display_page(pathname):
         return graph_layout()
     elif pathname == "/graph/2":
         return venn_layout()
+    elif pathname == "/graph/3":
+        return esm2_layout()
     else:
         home_html = load_html_template("assets/home.html")
         return dcc.Markdown(home_html, dangerously_allow_html=True)
+
 
 # Function to generate graph layout
 def graph_layout():
@@ -287,7 +483,7 @@ def graph_layout():
                 id="chart-type",
                 options=[
                     {"label": "Merged Chart", "value": "merged"},
-                    {"label": "Multi Chart", "value": "multi"}
+                    {"label": "Multi Chart", "value": "multi"},
                 ],
                 value="merged",
                 labelStyle={"display": "inline-block", "margin-right": "10px"},
@@ -299,6 +495,7 @@ def graph_layout():
             ),
         ],
     )
+
 
 # Function to generate Venn diagram layout
 def venn_layout():
@@ -318,18 +515,46 @@ def venn_layout():
         ],
     )
 
+
+# Function to generate ESM2 layout
+def esm2_layout():
+    return html.Div(
+        className="container",
+        children=[
+            html.H1(className="title", children="ESM2 Protein Stability"),
+            dcc.Dropdown(
+                id="esm2-dropdown",
+                options=[
+                    {"label": "Esm2_t6_8M_UR50D", "value": "t6"},
+                    {"label": "Esm2_t12_8M_UR50D", "value": "t12"},
+                    {"label": "Both", "value": "both"},
+                ],
+                value="t6",
+                clearable=False,
+            ),
+            dcc.Loading(
+                id="loading-3", type="default", children=dcc.Graph(id="esm2-plot")
+            ),
+        ],
+    )
+
+
 # Callback to update the histogram graph based on selected size and chart type
 @app.callback(
     Output("distribution-plot", "figure"),
-    [Input("size-dropdown", "value"), Input("chart-type", "value")]
+    [Input("size-dropdown", "value"), Input("chart-type", "value")],
 )
 def update_histogram(selected_size, chart_type):
     if not selected_size:
         raise PreventUpdate
     bpe_lengths, wordpiece_lengths, unigram_lengths, _, _, _ = load_data(selected_size)
     bpe_data = {length: bpe_lengths.count(length) for length in set(bpe_lengths)}
-    wordpiece_data = {length: wordpiece_lengths.count(length) for length in set(wordpiece_lengths)}
-    unigram_data = {length: unigram_lengths.count(length) for length in set(unigram_lengths)}
+    wordpiece_data = {
+        length: wordpiece_lengths.count(length) for length in set(wordpiece_lengths)
+    }
+    unigram_data = {
+        length: unigram_lengths.count(length) for length in set(unigram_lengths)
+    }
 
     if chart_type == "merged":
         fig = go.Figure()
@@ -343,7 +568,9 @@ def update_histogram(selected_size, chart_type):
             )
         )
         fig.add_trace(
-            go.Histogram(x=unigram_lengths, histnorm="percent", name="Unigram", opacity=0.6)
+            go.Histogram(
+                x=unigram_lengths, histnorm="percent", name="Unigram", opacity=0.6
+            )
         )
 
         fig.update_layout(barmode="overlay")
@@ -357,9 +584,12 @@ def update_histogram(selected_size, chart_type):
             bargroupgap=0.1,
         )
     else:
-        fig = create_combined_histogram(bpe_data, unigram_data, wordpiece_data, 'BPE', 'Unigram', 'WordPiece')
+        fig = create_combined_histogram(
+            bpe_data, unigram_data, wordpiece_data, "BPE", "Unigram", "WordPiece"
+        )
 
     return fig
+
 
 # Callback to update the Venn diagram based on selected size
 @app.callback(Output("venn-plot", "figure"), [Input("size-dropdown-venn", "value")])
@@ -371,6 +601,70 @@ def update_venn(selected_size):
         [bpe_set, wordpiece_set, unigram_set], ("BPE", "Wordpiece", "Unigram")
     )
     return fig
+
+
+# Callback to update the ESM2 plot based on selected option
+@app.callback(Output("esm2-plot", "figure"), [Input("esm2-dropdown", "value")])
+def update_esm2_plot(selected_option):
+    if selected_option == "t6":
+        return create_esm2_t6_figure()
+    elif selected_option == "t12":
+        return create_esm2_t12_figure()
+    else:
+        fig_t6 = create_esm2_t6_figure()
+        fig_t12 = create_esm2_t12_figure()
+
+        fig_both = go.Figure()
+        for trace in fig_t6.data:
+            trace.name += " (Esm2_t6)"
+            trace.line.color = "#2F6690" if "Mean" in trace.name else "#B6D094"
+            fig_both.add_trace(trace)
+        for trace in fig_t12.data:
+            trace.name += " (Esm2_t12)"
+            trace.line.color = "#FFA15A" if "Mean" in trace.name else "#19D3F3"
+            fig_both.add_trace(trace)
+
+        fig_both.update_layout(
+            showlegend=True,
+            title=go.layout.Title(
+                text="Esm2_t6_8M_UR50D and Esm2_t12_8M_UR50D <br><sup>Protein Stability</sup>",
+                xref="paper",
+                x=0,
+            ),
+            xaxis_title="Layer",
+            yaxis_title="Pearson correlation",
+            plot_bgcolor="white",
+            width=1000,
+            xaxis=dict(
+                showline=True,
+                showgrid=False,
+                showticklabels=True,
+                linecolor="rgb(204, 204, 204)",
+                linewidth=4,
+                ticks="outside",
+                tickfont=dict(
+                    family="Arial",
+                    size=16,
+                    color="rgb(82, 82, 82)",
+                ),
+            ),
+            yaxis=dict(
+                showline=True,
+                showgrid=False,
+                showticklabels=True,
+                linecolor="rgb(204, 204, 204)",
+                linewidth=4,
+                ticks="outside",
+                tickfont=dict(
+                    family="Arial",
+                    size=16,
+                    color="rgb(82, 82, 82)",
+                ),
+            ),
+        )
+
+        return fig_both
+
 
 if __name__ == "__main__":
     app.run_server(debug=True)
