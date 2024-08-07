@@ -25,6 +25,52 @@ app._favicon = "assets/favicon.ico"
 type_of_token = ["bpe", "wordpiece", "unigram"]
 sizes = ["5k", "15k", "30k"]
 
+# Tokenizer performance data
+performance_data = {
+    "pearson": {"character": 0.5836549997329712, "bpe": 0.4030608534812927},
+    "expvar": {"character": 0.3428827226161957, "bpe": 0.1470852196216583},
+}
+
+# Fluorescence data
+fluorescence_data = [
+    {"pearson": 0.4001138508319860, "model": 6, "layer": 0, "pooling": "mean"},
+    {"pearson": 0.5680390000343320, "model": 6, "layer": 1, "pooling": "mean"},
+    {"pearson": 0.5519357323646550, "model": 6, "layer": 2, "pooling": "mean"},
+    {"pearson": 0.64509117603302, "model": 6, "layer": 3, "pooling": "mean"},
+    {"pearson": 0.6930631995201110, "model": 6, "layer": 4, "pooling": "mean"},
+    {"pearson": 0.6838599443435670, "model": 6, "layer": 5, "pooling": "mean"},
+    {"pearson": 0.3985217809677120, "model": 6, "layer": 0, "pooling": "attention"},
+    {"pearson": 0.575803279876709, "model": 6, "layer": 1, "pooling": "attention"},
+    {"pearson": 0.6514235734939580, "model": 6, "layer": 2, "pooling": "attention"},
+    {"pearson": 0.7793707251548770, "model": 6, "layer": 3, "pooling": "attention"},
+    {"pearson": 0.3398455083370210, "model": 6, "layer": 4, "pooling": "attention"},
+    {"pearson": 0.5133616328239440, "model": 6, "layer": 5, "pooling": "attention"},
+    {"pearson": 0.4011310935020450, "model": 12, "layer": 0, "pooling": "mean"},
+    {"pearson": 0.554573118686676, "model": 12, "layer": 1, "pooling": "mean"},
+    {"pearson": 0.604721188545227, "model": 12, "layer": 2, "pooling": "mean"},
+    {"pearson": 0.7303760051727300, "model": 12, "layer": 3, "pooling": "mean"},
+    {"pearson": 0.781193733215332, "model": 12, "layer": 4, "pooling": "mean"},
+    {"pearson": 0.7253535985946660, "model": 12, "layer": 5, "pooling": "mean"},
+    {"pearson": 0.6893606185913090, "model": 12, "layer": 6, "pooling": "mean"},
+    {"pearson": 0.6480709910392760, "model": 12, "layer": 7, "pooling": "mean"},
+    {"pearson": 0.6657119393348690, "model": 12, "layer": 8, "pooling": "mean"},
+    {"pearson": 0.6617504954338070, "model": 12, "layer": 9, "pooling": "mean"},
+    {"pearson": 0.6625848412513730, "model": 12, "layer": 10, "pooling": "mean"},
+    {"pearson": 0.6537620425224300, "model": 12, "layer": 11, "pooling": "mean"},
+    {"pearson": 0.3981407284736630, "model": 12, "layer": 0, "pooling": "attention"},
+    {"pearson": 0.5124710202217100, "model": 12, "layer": 1, "pooling": "attention"},
+    {"pearson": 0.4464473724365230, "model": 12, "layer": 2, "pooling": "attention"},
+    {"pearson": 0.4861785471439360, "model": 12, "layer": 3, "pooling": "attention"},
+    {"pearson": 0.6684212684631350, "model": 12, "layer": 4, "pooling": "attention"},
+    {"pearson": 0.6855170130729680, "model": 12, "layer": 5, "pooling": "attention"},
+    {"pearson": 0.4844455420970920, "model": 12, "layer": 6, "pooling": "attention"},
+    {"pearson": 0.5026527047157290, "model": 12, "layer": 7, "pooling": "attention"},
+    {"pearson": 0.4601158499717710, "model": 12, "layer": 8, "pooling": "attention"},
+    {"pearson": 0.4118598699569700, "model": 12, "layer": 9, "pooling": "attention"},
+    {"pearson": 0.3407143056392670, "model": 12, "layer": 10, "pooling": "attention"},
+    {"pearson": 0.1714392006397250, "model": 12, "layer": 11, "pooling": "attention"},
+]
+
 
 # Function to load data from URL
 def load_data(size):
@@ -415,6 +461,263 @@ def create_esm2_t12_figure():
     return fig
 
 
+# Create a figure for Esm2_t6_8M_UR50D Fluorescence
+def create_esm2_fluorescence_t6_figure():
+    layers = [1, 2, 3, 4, 5, 6]
+    pearson_mean = [
+        0.4001138508319860,
+        0.5680390000343320,
+        0.5519357323646550,
+        0.64509117603302,
+        0.6930631995201110,
+        0.6838599443435670,
+    ]
+    pearson_attention = [
+        0.3985217809677120,
+        0.575803279876709,
+        0.6514235734939580,
+        0.7793707251548770,
+        0.3398455083370210,
+        0.5133616328239440,
+    ]
+
+    fig = go.Figure()
+
+    fig.add_trace(
+        go.Scatter(
+            x=layers,
+            y=pearson_mean,
+            mode="lines+markers",
+            name="Esm2_t6 Fluorescence Mean",
+            line=dict(color="#2F6690", width=4),
+            marker=dict(color="#2F6690", size=9),
+        )
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=layers,
+            y=pearson_attention,
+            mode="lines+markers",
+            name="Esm2_t6 Fluorescence Attention",
+            line=dict(color="#B6D094", width=4),
+            marker=dict(color="#B6D094", size=9),
+        )
+    )
+
+    fig.update_layout(
+        showlegend=True,
+        title=go.layout.Title(
+            text="Esm2_t6_8M_UR50D <br><sup>Protein Fluorescence</sup>",
+            xref="paper",
+            x=0,
+        ),
+        xaxis_title="Layer",
+        yaxis_title="Pearson correlation",
+        plot_bgcolor="white",
+        autosize=True,
+        xaxis=dict(
+            showline=True,
+            showgrid=False,
+            showticklabels=True,
+            linecolor="rgb(204, 204, 204)",
+            linewidth=4,
+            ticks="outside",
+            tickfont=dict(
+                family="Arial",
+                size=16,
+                color="rgb(82, 82, 82)",
+            ),
+        ),
+        yaxis=dict(
+            showline=True,
+            showgrid=False,
+            showticklabels=True,
+            linecolor="rgb(204, 204, 204)",
+            linewidth=4,
+            ticks="outside",
+            tickfont=dict(
+                family="Arial",
+                size=16,
+                color="rgb(82, 82, 82)",
+            ),
+        ),
+        legend=dict(orientation="h", yanchor="top", y=-0.2, xanchor="center", x=0.5),
+    )
+
+    return fig
+
+
+# Create a figure for Esm2_t12_35M_UR50D Fluorescence
+def create_esm2_fluorescence_t12_figure():
+    layers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    pearson_mean = [
+        0.4011310935020450,
+        0.554573118686676,
+        0.604721188545227,
+        0.7303760051727300,
+        0.781193733215332,
+        0.7253535985946660,
+        0.6893606185913090,
+        0.6480709910392760,
+        0.6657119393348690,
+        0.6617504954338070,
+        0.6625848412513730,
+        0.6537620425224300,
+    ]
+    pearson_attention = [
+        0.3981407284736630,
+        0.5124710202217100,
+        0.4464473724365230,
+        0.4861785471439360,
+        0.6684212684631350,
+        0.6855170130729680,
+        0.4844455420970920,
+        0.5026527047157290,
+        0.4601158499717710,
+        0.4118598699569700,
+        0.3407143056392670,
+        0.1714392006397250,
+    ]
+
+    fig = go.Figure()
+
+    fig.add_trace(
+        go.Scatter(
+            x=layers,
+            y=pearson_mean,
+            mode="lines+markers",
+            name="Esm2_t12 Fluorescence Mean",
+            line=dict(color="#FFA15A", width=4),
+            marker=dict(color="#FFA15A", size=9),
+        )
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=layers,
+            y=pearson_attention,
+            mode="lines+markers",
+            name="Esm2_t12 Fluorescence Attention",
+            line=dict(color="#19D3F3", width=4),
+            marker=dict(color="#19D3F3", size=9),
+        )
+    )
+
+    fig.update_layout(
+        showlegend=True,
+        title=go.layout.Title(
+            text="Esm2_t12_35M_UR50D <br><sup>Protein Fluorescence</sup>",
+            xref="paper",
+            x=0,
+        ),
+        xaxis_title="Layer",
+        yaxis_title="Pearson correlation",
+        plot_bgcolor="white",
+        autosize=True,
+        xaxis=dict(
+            showline=True,
+            showgrid=False,
+            showticklabels=True,
+            linecolor="rgb(204, 204, 204)",
+            linewidth=4,
+            ticks="outside",
+            tickfont=dict(
+                family="Arial",
+                size=16,
+                color="rgb(82, 82, 82)",
+            ),
+        ),
+        yaxis=dict(
+            showline=True,
+            showgrid=False,
+            showticklabels=True,
+            linecolor="rgb(204, 204, 204)",
+            linewidth=4,
+            ticks="outside",
+            tickfont=dict(
+                family="Arial",
+                size=16,
+                color="rgb(82, 82, 82)",
+            ),
+        ),
+        legend=dict(orientation="h", yanchor="top", y=-0.2, xanchor="center", x=0.5),
+    )
+
+    return fig
+
+
+# Create a figure for Tokenizer Performance Comparison
+def create_tokenizer_performance_figure(metric):
+    x = ["Character", "BPE"]
+    y_char = [performance_data[metric]["character"]]
+    y_bpe = [performance_data[metric]["bpe"]]
+
+    fig = go.Figure()
+    fig.add_trace(
+        go.Bar(
+            x=x,
+            y=y_char,
+            name="Character",
+            marker_color="#5a97c7",
+            marker_line_color="rgb(8,48,107)",
+            marker_line_width=1.5,
+            opacity=0.6,
+        )
+    )
+    fig.add_trace(
+        go.Bar(
+            x=x,
+            y=y_bpe,
+            name="BPE",
+            marker_color="#B6D094",
+            marker_line_color="#6c8f3d",
+            marker_line_width=1.5,
+            opacity=0.6,
+        )
+    )
+
+    fig.update_layout(
+        title=go.layout.Title(
+            text=f"Tokenizer Performance Comparison ({metric.capitalize()})",
+            xref="paper",
+            x=0.5,
+            xanchor="center",
+        ),
+        xaxis_title="Tokenizer",
+        yaxis_title=metric.capitalize(),
+        plot_bgcolor="white",
+        autosize=True,
+        xaxis=dict(
+            showline=True,
+            showgrid=False,
+            showticklabels=True,
+            linecolor="rgb(204, 204, 204)",
+            linewidth=4,
+            ticks="outside",
+            tickfont=dict(
+                family="Arial",
+                size=16,
+                color="rgb(82, 82, 82)",
+            ),
+        ),
+        yaxis=dict(
+            showline=True,
+            showgrid=False,
+            showticklabels=True,
+            linecolor="rgb(204, 204, 204)",
+            linewidth=4,
+            ticks="outside",
+            tickfont=dict(
+                family="Arial",
+                size=16,
+                color="rgb(82, 82, 82)",
+            ),
+        ),
+        legend=dict(orientation="h", yanchor="top", y=-0.2, xanchor="center", x=0.5),
+    )
+
+    return fig
+
+
 # Define the layout of the app
 app.layout = html.Div(
     children=[
@@ -444,14 +747,20 @@ app.layout = html.Div(
                                             className="dropdown-item",
                                         ),
                                         html.A(
-                                            "ESM2 Protein Stability",
+                                            "Protein Model Performance",
                                             href="/graph/3",
+                                            className="dropdown-item",
+                                        ),
+                                        html.A(
+                                            "Compare Tokenizer Performance",
+                                            href="/graph/4",
                                             className="dropdown-item",
                                         ),
                                     ],
                                 ),
                             ],
                         ),
+                        html.A("Source Code", href="https://github.com/devium335/dash-project", className="nav-link")
                     ],
                 ),
             ],
@@ -470,6 +779,8 @@ def display_page(pathname):
         return venn_layout()
     elif pathname == "/graph/3":
         return esm2_layout()
+    elif pathname == "/graph/4":
+        return tokenizer_performance_layout()
     else:
         home_html = load_html_template("assets/home.html")
         return dcc.Markdown(home_html, dangerously_allow_html=True)
@@ -529,9 +840,9 @@ def esm2_layout():
     return html.Div(
         className="container",
         children=[
-            html.H1(className="title", children="ESM2 Protein Stability"),
+            html.H1(className="title", children="Protein Model Performance"),
             dcc.Dropdown(
-                id="esm2-dropdown",
+                id="esm2-model-dropdown",
                 options=[
                     {"label": "Esm2_t6_8M_UR50D", "value": "t6"},
                     {"label": "Esm2_t12_35M_UR50D", "value": "t12"},
@@ -540,8 +851,43 @@ def esm2_layout():
                 value="t6",
                 clearable=False,
             ),
+            dcc.Dropdown(
+                id="esm2-data-dropdown",
+                options=[
+                    {"label": "Stability", "value": "stability"},
+                    {"label": "Fluorescence", "value": "fluorescence"},
+                    {"label": "Both", "value": "both"},
+                ],
+                value="stability",
+                clearable=False,
+            ),
             dcc.Loading(
                 id="loading-3", type="default", children=dcc.Graph(id="esm2-plot")
+            ),
+        ],
+    )
+
+
+# Function to generate tokenizer performance layout
+def tokenizer_performance_layout():
+    return html.Div(
+        className="container",
+        children=[
+            html.H1(className="title", children="Compare Tokenizer Performance"),
+            dcc.Dropdown(
+                id="metric-dropdown",
+                options=[
+                    {"label": "Pearson", "value": "pearson"},
+                    {"label": "Explained Variance", "value": "expvar"},
+                    {"label": "Both", "value": "both"},
+                ],
+                value="pearson",
+                clearable=False,
+            ),
+            dcc.Loading(
+                id="loading-4",
+                type="default",
+                children=dcc.Graph(id="performance-plot"),
             ),
         ],
     )
@@ -612,32 +958,162 @@ def update_venn(selected_size):
     return fig
 
 
-# Callback to update the ESM2 plot based on selected option
-# Callback to update the ESM2 plot based on selected option
-@app.callback(Output("esm2-plot", "figure"), [Input("esm2-dropdown", "value")])
-def update_esm2_plot(selected_option):
-    if selected_option == "t6":
-        return create_esm2_t6_figure()
-    elif selected_option == "t12":
-        return create_esm2_t12_figure()
+# Callback to update the ESM2 plot based on selected model and data input
+@app.callback(
+    Output("esm2-plot", "figure"),
+    [Input("esm2-model-dropdown", "value"), Input("esm2-data-dropdown", "value")],
+)
+def update_esm2_plot(selected_model, selected_data):
+    if selected_model == "t6":
+        if selected_data == "stability":
+            return create_esm2_t6_figure()
+        elif selected_data == "fluorescence":
+            return create_esm2_fluorescence_t6_figure()
+        else:
+            fig_stability = create_esm2_t6_figure()
+            fig_fluorescence = create_esm2_fluorescence_t6_figure()
+
+            fig_both = go.Figure()
+            for trace in fig_stability.data:
+                trace.name += " (Stability)"
+                trace.line.color = "#2F6690" if "Mean" in trace.name else "#B6D094"
+                fig_both.add_trace(trace)
+            for trace in fig_fluorescence.data:
+                trace.name += " (Fluorescence)"
+                trace.line.color = "#FFA15A" if "Mean" in trace.name else "#19D3F3"
+                fig_both.add_trace(trace)
+
+            fig_both.update_layout(
+                showlegend=True,
+                title=go.layout.Title(
+                    text="Esm2_t6_8M_UR50D <br><sup>Protein Stability and Fluorescence</sup>",
+                    xref="paper",
+                    x=0,
+                ),
+                xaxis_title="Layer",
+                yaxis_title="Pearson correlation",
+                plot_bgcolor="white",
+                autosize=True,
+                xaxis=dict(
+                    showline=True,
+                    showgrid=False,
+                    showticklabels=True,
+                    linecolor="rgb(204, 204, 204)",
+                    linewidth=4,
+                    ticks="outside",
+                    tickfont=dict(
+                        family="Arial",
+                        size=16,
+                        color="rgb(82, 82, 82)",
+                    ),
+                ),
+                yaxis=dict(
+                    showline=True,
+                    showgrid=False,
+                    showticklabels=True,
+                    linecolor="rgb(204, 204, 204)",
+                    linewidth=4,
+                    ticks="outside",
+                    tickfont=dict(
+                        family="Arial",
+                        size=16,
+                        color="rgb(82, 82, 82)",
+                    ),
+                ),
+                legend=dict(
+                    orientation="h", yanchor="top", y=-0.2, xanchor="center", x=0.5
+                ),
+            )
+            return fig_both
+    elif selected_model == "t12":
+        if selected_data == "stability":
+            return create_esm2_t12_figure()
+        elif selected_data == "fluorescence":
+            return create_esm2_fluorescence_t12_figure()
+        else:
+            fig_stability = create_esm2_t12_figure()
+            fig_fluorescence = create_esm2_fluorescence_t12_figure()
+
+            fig_both = go.Figure()
+            for trace in fig_stability.data:
+                trace.name += " (Stability)"
+                trace.line.color = "#2F6690" if "Mean" in trace.name else "#B6D094"
+                fig_both.add_trace(trace)
+            for trace in fig_fluorescence.data:
+                trace.name += " (Fluorescence)"
+                trace.line.color = "#FFA15A" if "Mean" in trace.name else "#19D3F3"
+                fig_both.add_trace(trace)
+
+            fig_both.update_layout(
+                showlegend=True,
+                title=go.layout.Title(
+                    text="Esm2_t12_35M_UR50D <br><sup>Protein Stability and Fluorescence</sup>",
+                    xref="paper",
+                    x=0,
+                ),
+                xaxis_title="Layer",
+                yaxis_title="Pearson correlation",
+                plot_bgcolor="white",
+                autosize=True,
+                xaxis=dict(
+                    showline=True,
+                    showgrid=False,
+                    showticklabels=True,
+                    linecolor="rgb(204, 204, 204)",
+                    linewidth=4,
+                    ticks="outside",
+                    tickfont=dict(
+                        family="Arial",
+                        size=16,
+                        color="rgb(82, 82, 82)",
+                    ),
+                ),
+                yaxis=dict(
+                    showline=True,
+                    showgrid=False,
+                    showticklabels=True,
+                    linecolor="rgb(204, 204, 204)",
+                    linewidth=4,
+                    ticks="outside",
+                    tickfont=dict(
+                        family="Arial",
+                        size=16,
+                        color="rgb(82, 82, 82)",
+                    ),
+                ),
+                legend=dict(
+                    orientation="h", yanchor="top", y=-0.2, xanchor="center", x=0.5
+                ),
+            )
+            return fig_both
     else:
-        fig_t6 = create_esm2_t6_figure()
-        fig_t12 = create_esm2_t12_figure()
+        fig_t6_stability = create_esm2_t6_figure()
+        fig_t12_stability = create_esm2_t12_figure()
+        fig_t6_fluorescence = create_esm2_fluorescence_t6_figure()
+        fig_t12_fluorescence = create_esm2_fluorescence_t12_figure()
 
         fig_both = go.Figure()
-        for trace in fig_t6.data:
-            trace.name += " (Esm2_t6)"
+        for trace in fig_t6_stability.data:
+            trace.name += " (Esm2_t6 Stability)"
             trace.line.color = "#2F6690" if "Mean" in trace.name else "#B6D094"
             fig_both.add_trace(trace)
-        for trace in fig_t12.data:
-            trace.name += " (Esm2_t12)"
+        for trace in fig_t12_stability.data:
+            trace.name += " (Esm2_t12 Stability)"
             trace.line.color = "#FFA15A" if "Mean" in trace.name else "#19D3F3"
+            fig_both.add_trace(trace)
+        for trace in fig_t6_fluorescence.data:
+            trace.name += " (Esm2_t6 Fluorescence)"
+            trace.line.color = "#A5D8FF" if "Mean" in trace.name else "#2F4B7C"
+            fig_both.add_trace(trace)
+        for trace in fig_t12_fluorescence.data:
+            trace.name += " (Esm2_t12 Fluorescence)"
+            trace.line.color = "#F0E442" if "Mean" in trace.name else "#D55E00"
             fig_both.add_trace(trace)
 
         fig_both.update_layout(
             showlegend=True,
             title=go.layout.Title(
-                text="Esm2_t6_8M_UR50D and Esm2_t12_8M_UR50D <br><sup>Protein Stability</sup>",
+                text="Esm2_t6_8M_UR50D and Esm2_t12_35M_UR50D <br><sup>Protein Stability and Fluorescence</sup>",
                 xref="paper",
                 x=0,
             ),
@@ -675,8 +1151,92 @@ def update_esm2_plot(selected_option):
                 orientation="h", yanchor="top", y=-0.2, xanchor="center", x=0.5
             ),
         )
-
         return fig_both
+
+
+# Callback to update the Tokenizer Performance plot based on selected metric
+@app.callback(Output("performance-plot", "figure"), [Input("metric-dropdown", "value")])
+def update_performance_plot(selected_metric):
+    if selected_metric == "both":
+        fig = make_subplots(
+            rows=1, cols=2, subplot_titles=("Pearson", "Explained Variance")
+        )
+
+        fig.add_trace(
+            go.Bar(
+                x=["Character", "BPE"],
+                y=[
+                    performance_data["pearson"]["character"],
+                    performance_data["pearson"]["bpe"],
+                ],
+                name="Pearson",
+                marker_color="#5a97c7",
+                marker_line_color="rgb(8,48,107)",
+                marker_line_width=1.5,
+                opacity=0.6,
+            ),
+            row=1,
+            col=1,
+        )
+        fig.add_trace(
+            go.Bar(
+                x=["Character", "BPE"],
+                y=[
+                    performance_data["expvar"]["character"],
+                    performance_data["expvar"]["bpe"],
+                ],
+                name="Explained Variance",
+                marker_color="#B6D094",
+                marker_line_color="#6c8f3d",
+                marker_line_width=1.5,
+                opacity=0.6,
+            ),
+            row=1,
+            col=2,
+        )
+
+        fig.update_layout(
+            title=go.layout.Title(
+                text="Tokenizer Performance Comparison (Pearson & Explained Variance)",
+                xref="paper",
+                x=0.5,
+                xanchor="center",
+            ),
+            plot_bgcolor="white",
+            autosize=True,
+            xaxis=dict(
+                showline=True,
+                showgrid=False,
+                showticklabels=True,
+                linecolor="rgb(204, 204, 204)",
+                linewidth=4,
+                ticks="outside",
+                tickfont=dict(
+                    family="Arial",
+                    size=16,
+                    color="rgb(82, 82, 82)",
+                ),
+            ),
+            yaxis=dict(
+                showline=True,
+                showgrid=False,
+                showticklabels=True,
+                linecolor="rgb(204, 204, 204)",
+                linewidth=4,
+                ticks="outside",
+                tickfont=dict(
+                    family="Arial",
+                    size=16,
+                    color="rgb(82, 82, 82)",
+                ),
+            ),
+            legend=dict(
+                orientation="h", yanchor="top", y=-0.2, xanchor="center", x=0.5
+            ),
+        )
+        return fig
+    else:
+        return create_tokenizer_performance_figure(selected_metric)
 
 
 if __name__ == "__main__":
