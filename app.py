@@ -18,6 +18,8 @@ matplotlib.use("Agg")
 # Initialize the Flask server and Dash app
 server = flask.Flask(__name__)
 app = dash.Dash(__name__, server=server, suppress_callback_exceptions=True)
+app.title = "Lab 11"
+app._favicon = "assets/favicon.ico"
 
 # Define global variables
 type_of_token = ["bpe", "wordpiece", "unigram"]
@@ -370,7 +372,9 @@ def create_esm2_t12_figure():
     fig.update_layout(
         showlegend=True,
         title=go.layout.Title(
-            text="Esm2_t12_35M_UR50D <br><sup>Protein Stability</sup>", xref="paper", x=0
+            text="Esm2_t12_35M_UR50D <br><sup>Protein Stability</sup>",
+            xref="paper",
+            x=0,
         ),
         xaxis_title="Layer",
         yaxis_title="Pearson correlation",
@@ -667,4 +671,4 @@ def update_esm2_plot(selected_option):
 
 
 if __name__ == "__main__":
-    app.run_server(debug=True, port=8080, host='0.0.0.0')
+    app.run_server(debug=True, port=8080, host="0.0.0.0")
