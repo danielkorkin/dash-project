@@ -183,8 +183,7 @@ def venn_to_plotly(
     p_fig.update_layout(
         plot_bgcolor="white",
         margin=dict(b=0, l=10, pad=0, r=10, t=40),
-        width=800,
-        height=400,
+        autosize=True,
         shapes=L_shapes,
         annotations=L_annotation,
         title=dict(text=title, x=0.5, xanchor="center"),
@@ -193,39 +192,42 @@ def venn_to_plotly(
     return p_fig
 
 
-# Create a combined histogram chart with subplots
 def create_combined_histogram(data1, data2, data3, title1, title2, title3):
     fig = make_subplots(
-        rows=1,
-        cols=3,
+        rows=3,  # Change to 3 rows
+        cols=1,  # Change to 1 column
         subplot_titles=(title1, title2, title3),
-        horizontal_spacing=0.175,
+        vertical_spacing=0.15,  # Adjust vertical spacing
     )
 
     fig.add_trace(
         go.Bar(x=list(data1.keys()), y=list(data1.values()), name=title1), row=1, col=1
     )
     fig.add_trace(
-        go.Bar(x=list(data2.keys()), y=list(data2.values()), name=title2), row=1, col=2
+        go.Bar(x=list(data2.keys()), y=list(data2.values()), name=title2), row=2, col=1
     )
     fig.add_trace(
-        go.Bar(x=list(data3.keys()), y=list(data3.values()), name=title3), row=1, col=3
+        go.Bar(x=list(data3.keys()), y=list(data3.values()), name=title3), row=3, col=1
     )
 
     fig.update_layout(
-        height=400,
-        width=1200,
+        height=1200,  # Adjust height to fit all subplots
+        autosize=True,
         showlegend=False,
         title_text="Token Length Distribution",
-        yaxis_type="log",
-        yaxis2_type="log",
-        yaxis3_type="log",
-        xaxis_title="token length",
-        yaxis_title="log number of tokens",
-        xaxis2_title="token length",
-        yaxis2_title="log number of tokens",
-        xaxis3_title="token length",
-        yaxis3_title="log number of tokens",
+        yaxis=dict(type="log", title="log number of tokens"),
+        xaxis=dict(title="token length"),
+        yaxis2=dict(type="log", title="log number of tokens"),
+        xaxis2=dict(title="token length"),
+        yaxis3=dict(type="log", title="log number of tokens"),
+        xaxis3=dict(title="token length"),
+        legend=dict(
+            orientation="h",
+            yanchor="top",
+            y=-0.2,
+            xanchor="center",
+            x=0.5,
+        ),
     )
 
     return fig
@@ -282,7 +284,7 @@ def create_esm2_t6_figure():
         xaxis_title="Layer",
         yaxis_title="Pearson correlation",
         plot_bgcolor="white",
-        width=1000,
+        autosize=True,
         xaxis=dict(
             showline=True,
             showgrid=False,
@@ -309,6 +311,7 @@ def create_esm2_t6_figure():
                 color="rgb(82, 82, 82)",
             ),
         ),
+        legend=dict(orientation="h", yanchor="top", y=-0.2, xanchor="center", x=0.5),
     )
 
     return fig
@@ -379,7 +382,7 @@ def create_esm2_t12_figure():
         xaxis_title="Layer",
         yaxis_title="Pearson correlation",
         plot_bgcolor="white",
-        width=1000,
+        autosize=True,
         xaxis=dict(
             showline=True,
             showgrid=False,
@@ -406,6 +409,7 @@ def create_esm2_t12_figure():
                 color="rgb(82, 82, 82)",
             ),
         ),
+        legend=dict(orientation="h", yanchor="top", y=-0.2, xanchor="center", x=0.5),
     )
 
     return fig
@@ -586,6 +590,7 @@ def update_histogram(selected_size, chart_type):
             yaxis=dict(title="Percentage"),
             bargap=0.2,
             bargroupgap=0.1,
+            autosize=True,
         )
     else:
         fig = create_combined_histogram(
@@ -607,6 +612,7 @@ def update_venn(selected_size):
     return fig
 
 
+# Callback to update the ESM2 plot based on selected option
 # Callback to update the ESM2 plot based on selected option
 @app.callback(Output("esm2-plot", "figure"), [Input("esm2-dropdown", "value")])
 def update_esm2_plot(selected_option):
@@ -638,7 +644,7 @@ def update_esm2_plot(selected_option):
             xaxis_title="Layer",
             yaxis_title="Pearson correlation",
             plot_bgcolor="white",
-            width=1000,
+            autosize=True,
             xaxis=dict(
                 showline=True,
                 showgrid=False,
@@ -664,6 +670,9 @@ def update_esm2_plot(selected_option):
                     size=16,
                     color="rgb(82, 82, 82)",
                 ),
+            ),
+            legend=dict(
+                orientation="h", yanchor="top", y=-0.2, xanchor="center", x=0.5
             ),
         )
 
