@@ -18,7 +18,7 @@ matplotlib.use("Agg")
 # Initialize the Flask server and Dash app
 server = flask.Flask(__name__)
 app = dash.Dash(__name__, server=server, suppress_callback_exceptions=True)
-app.title = "Lab 11"
+app.title = "Protein Language Models"
 app._favicon = "assets/favicon.ico"
 
 # Define global variables
